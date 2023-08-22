@@ -1,0 +1,8 @@
+path: D:/Epam/CV/Yolov8Training
+train: datasets/images/train
+val: datasets/images/train
+
+#Classes
+nc: 1
+names:
+  0: person
