@@ -1,6 +1,6 @@
 path: D:/Epam/CV/Yolov8Training
-train: datasets/images/train
-val: datasets/images/train
+train: datasets/images
+val: datasets/images
 
 #Classes
 nc: 1
