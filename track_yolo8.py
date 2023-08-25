@@ -52,7 +52,7 @@ detection_model = AutoDetectionModel.from_pretrained(
     image_size=640
 )
 
-#model = YOLO('ultralytics/runs/detect/train2/weights/best.pt')
+# model = YOLO('ultralytics/runs/detect/train2/weights/best.pt')
 
 tracker = Tracker()
 
@@ -70,8 +70,8 @@ while ret:
     results = get_sliced_prediction(
         frame,
         detection_model,
-        slice_height=128,
-        slice_width=128,
+        slice_height=256,
+        slice_width=256,
         overlap_height_ratio=0.2,
         overlap_width_ratio=0.2
     )
@@ -79,16 +79,12 @@ while ret:
 
     results.export_visuals(export_dir="vis_result/")
     #
-    # Image(f"vis_result/prediction_visual_{frame_idx}.png")
-
     #results = model(frame)
 
     results = results.to_coco_annotations()
 
-    # print(results)
-
+    detections = []
     for result in results:
-        detections = []
         bbox = result['bbox']
         score = result['score']
         class_id = result['category_id']
@@ -102,6 +98,7 @@ while ret:
         class_id = int(class_id)
         if score > detection_threshold:
             detections.append([x1, y1, x2, y2, score])
+
 
         tracker.update(frame, detections)
 
