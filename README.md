@@ -28,6 +28,8 @@ In **track_yolo8.py** tracking with SAHI (sliding window prediction) using YOLOv
 python track_yolo8.py --video_path MOT20-07.mp4
 ```
 
+**tracker.py** - auxiliary module for tracking using DeepSORT.
+
 The result video with tracking will be saved as outs/MOT20-07.mp4 file.
 
 Resulting videos are available via link: https://drive.google.com/drive/folders/1-tio25jy6FH8ZH5Qeeks7YPiX2tqjI-E?usp=sharing
