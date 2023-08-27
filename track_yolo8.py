@@ -48,7 +48,7 @@ detection_model = AutoDetectionModel.from_pretrained(
     model_path="yolov8m.pt",
     config_path="data_config.yaml",
     confidence_threshold=0.4,
-    device="cpu",
+    device="cuda:1",
     image_size=640
 )
 
@@ -95,8 +95,8 @@ while ret:
         y1 = int(y1)
         x2 = int(x1 + width)
         y2 = int(y1 + height)
-        class_id = int(class_id)
-        if score > detection_threshold:
+        class_id = class_id
+        if score > detection_threshold and class_id == 0: #take only persons
             detections.append([x1, y1, x2, y2, score])
 
 
@@ -108,15 +108,18 @@ while ret:
             track_id = track.track_id
 
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (colors[track_id % len(colors)]), 3)
+            #to compute motmetrics we need to have top-left-width-height
+            width = int(x2)-int(x1)
+            height = int(y2)-int(y1)
             out_results.append([
-                frame_idx, track_id, bbox[0], bbox[1], bbox[2], bbox[3]])
+                frame_idx, track_id, bbox[0], bbox[1], width, height])
 
     cap_out.write(frame)
     ret, frame = cap.read()
 
 cap.release()
 cap_out.release()
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()
 
 #write results to .txt file
 f = open(output_file, 'w')
