@@ -3,6 +3,8 @@ import random
 import argparse
 import cv2
 
+from matplotlib import pyplot as plt
+
 from IPython.display import Image
 
 import sahi
@@ -10,6 +12,9 @@ import sahi
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
 from sahi.utils.cv import read_image_as_pil
+
+from sahi.utils.yolov8 import download_yolov8m_model
+
 
 
 from ultralytics import YOLO
@@ -43,10 +48,12 @@ cap_out = cv2.VideoWriter(video_out_path, cv2.VideoWriter_fourcc(*'MP4V'), cap.g
                           (frame.shape[1], frame.shape[0]))
 
 
+yolov8_model_path = "models/yolov8m.pt"
+download_yolov8m_model(yolov8_model_path)
+
 detection_model = AutoDetectionModel.from_pretrained(
     model_type='yolov8',
-    model_path="yolov8m.pt",
-    config_path="data_config.yaml",
+    model_path=yolov8_model_path,
     confidence_threshold=0.4,
     device="cuda:1",
     image_size=640
@@ -70,8 +77,8 @@ while ret:
     results = get_sliced_prediction(
         frame,
         detection_model,
-        slice_height=256,
-        slice_width=256,
+        slice_height=512,
+        slice_width=512,
         overlap_height_ratio=0.2,
         overlap_width_ratio=0.2
     )
@@ -95,31 +102,34 @@ while ret:
         y1 = int(y1)
         x2 = int(x1 + width)
         y2 = int(y1 + height)
-        class_id = class_id
         if score > detection_threshold and class_id == 0: #take only persons
             detections.append([x1, y1, x2, y2, score])
 
 
-        tracker.update(frame, detections)
+    tracker.update(frame, detections)
 
-        for track in tracker.tracks:
-            bbox = track.bbox
-            x1, y1, x2, y2 = bbox
-            track_id = track.track_id
-
-            cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (colors[track_id % len(colors)]), 3)
+    for track in tracker.tracks:
+        bbox = track.bbox
+        x1, y1, x2, y2 = bbox
+        track_id = track.track_id
+        cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (colors[track_id % len(colors)]), 3)
+        # plt.figure(figsize=(9,6))
+        # plt.imshow(frame)
+        # plt.show()
+                    # cv2.putText(frame, f'{score}', (int(x1), int(y1) - 3), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1,
+            #             cv2.LINE_AA)
             #to compute motmetrics we need to have top-left-width-height
-            width = int(x2)-int(x1)
-            height = int(y2)-int(y1)
-            out_results.append([
-                frame_idx, track_id, bbox[0], bbox[1], width, height])
+        width = int(x2)-int(x1)
+        height = int(y2)-int(y1)
+        out_results.append([
+        frame_idx, track_id, bbox[0], bbox[1], width, height])
 
     cap_out.write(frame)
     ret, frame = cap.read()
 
 cap.release()
 cap_out.release()
-#cv2.destroyAllWindows()
+
 
 #write results to .txt file
 f = open(output_file, 'w')
