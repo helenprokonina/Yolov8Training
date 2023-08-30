@@ -54,7 +54,7 @@ download_yolov8m_model(yolov8_model_path)
 detection_model = AutoDetectionModel.from_pretrained(
     model_type='yolov8',
     model_path=yolov8_model_path,
-    confidence_threshold=0.4,
+    confidence_threshold=0.4, #0.25
     device="cuda:1",
     image_size=640
 )
