@@ -22,12 +22,12 @@ Typical uses of this tool might be downloading images:
 Narratives, Exhaustively annotated people, etc.)
 
 The input file IMAGE_LIST should be a text file containing one image per line
-with the format <SPLIT>/<IMAGE_ID>, where <SPLIT> is either "train", "test",
+with the format <SPLIT>/<IMAGE_ID>, where <SPLIT> is either "train", "test.json",
 "validation", or "challenge2018"; and <IMAGE_ID> is the image ID that uniquely
 identifies the image in Open Images. A sample file could be:
   train/f9e0434389a1d4dd
   train/1a007563ebc18664
-  test/ea8bfd4e765304db
+  test.json/ea8bfd4e765304db
 
 """
 
@@ -42,7 +42,7 @@ import botocore
 import tqdm
 
 BUCKET_NAME = 'open-images-dataset'
-REGEX = r'(test|train|validation|challenge2018)/([a-fA-F0-9]*)'
+REGEX = r'(test.json|train|validation|challenge2018)/([a-fA-F0-9]*)'
 
 
 def check_and_homogenize_one_image(image):

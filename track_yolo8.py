@@ -59,7 +59,7 @@ detection_model = AutoDetectionModel.from_pretrained(
     image_size=640
 )
 
-# model = YOLO('ultralytics/runs/detect/train2/weights/best.pt')
+# model = YOLO('ultralytics/runs/detect/train2/weights/best_small.pt')
 
 tracker = Tracker()
 
