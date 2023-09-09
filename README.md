@@ -34,3 +34,30 @@ The result video with tracking will be saved as outs/MOT20-07.mp4 file.
 
 Resulting videos are available via link: https://drive.google.com/drive/folders/1Wr14mHCdV5i1XiJPNiSr1dGIFXbWscxC?usp=sharing
 
+## SAHI folders are:
+
+all results with sahi were for slices: [256, 512] and overlap [0.2, 0.5, 0.8]
+
+### with SAHI
+**yolo_coco_pretrained**: results from applying sahi with pretrained YOLOv8m model on COCO val dataset (coco-2017/validation/data) with slice (256-512) and overlap (0.2, 0.5, 0.8)
+**yolo_coco_finetuned**: results from applying sahi with finetuned on people dataset YOLOv8 model to COCO val dataset (model - best_small.pt)
+
+**yolo_people_pretrained**: results from applying sahi with pretrained YOLOv8m model on PEOPLE dataset (people_test_images)
+**yolo_people_finetuned**: results from applying sahi with finetuned on people dataset YOLOv8 model to PEOPLE dataset (model - best_small.pt)
+
+
+### without SAHI
+**yolo_no_slice_coco_pretrained**: results from applying usual YOLOv8m on COCO dataset
+**yolo_no_slice_coco_finetuned**: results from applying pretrained on people Yolov8 model (best_small.pt) on COCO
+
+**yolo_no_slice_people_pretrained**: results from applying usual YOLOv8m on PEOPLE dataset
+**yolo_no_slice_people_finetuned**: results from applying pretrained on people Yolov8 model (best_small.pt) on PEOPLE
+
+
+## Checking --postprocess_match_threshold and --postprocess_match_metric
+
+**postprocess_match_threshold**: 0.1, 0.3, 0.5
+**postprocess_match_metric**: IOU, IOS
+
+**sahi_people**: applying sahi with pretrained Yolov8m model on PEOPLE with three match thresholds and two match metrics
+**sahi_coco**: applying sahi with pretrained Yolov8m model on COCO with three match thresholds and two match metrics
